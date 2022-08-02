@@ -14,6 +14,7 @@ class App extends React.Component {
       cardImage: '',
       cardRare: 'normal',
       cardTrunfo: false,
+      isSaveButtonDisabled: true,
     };
   }
 
@@ -23,8 +24,36 @@ class App extends React.Component {
 
     this.setState({
       [name]: value,
-    });
+    }, this.enableSaveButton);
   };
+
+  enableSaveButton = () => {
+    const {
+      cardName,
+      cardDescription,
+      cardAttr1,
+      cardAttr2,
+      cardAttr3,
+      cardImage,
+    } = this.state;
+
+    const maxAttrValue = 90;
+    const maxAttrSum = 210;
+
+    if ((cardName.length === 0
+      || cardDescription.length === 0
+      || cardImage.length === 0
+      || cardAttr1 < 0
+      || cardAttr2 < 0
+      || cardAttr3 < 0
+      || cardAttr1 > maxAttrValue
+      || cardAttr2 > maxAttrValue
+      || cardAttr3 > maxAttrValue
+      || cardAttr1 + cardAttr2 + cardAttr3 > maxAttrSum)
+    ) {
+      this.setState({ isSaveButtonDisabled: true });
+    } else this.setState({ isSaveButtonDisabled: false });
+  }
 
   render() {
     const {
@@ -42,7 +71,7 @@ class App extends React.Component {
       <div>
         <h1>Tryunfo</h1>
         <Form
-          value={ cardName }
+          cardName={ cardName }
           cardImage={ cardImage }
           cardDescription={ cardDescription }
           cardAttr1={ cardAttr1 }
